@@ -6,6 +6,7 @@
 package gui;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -47,7 +48,12 @@ public class PrincipalFrame extends javax.swing.JFrame {
         limpiarButton = new javax.swing.JButton();
         salirButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Operadores"));
 
@@ -197,7 +203,7 @@ public class PrincipalFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,28 +230,62 @@ public class PrincipalFrame extends javax.swing.JFrame {
         unoText.requestFocus();
     }//GEN-LAST:event_limpiarButtonActionPerformed
 
+    private int convertir(JTextField text) throws Exception {
+        try {
+            return Integer.parseInt(text.getText());
+        } catch (Exception e) {
+            text.requestFocus();
+            throw new Exception();
+        }
+    }
+    
     private void SumarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SumarButtonActionPerformed
         
-        int suma = 0;
-        
-        suma = Integer.parseInt(unoText.getText()) +
-            Integer.parseInt(dosText.getText()) +
-            Integer.parseInt(tresText.getText()) +
-            Integer.parseInt(cuatroText.getText()) +
-            Integer.parseInt(cincoText.getText()) +
-            Integer.parseInt(seisText.getText()); 
-        
+        try {
+            int suma = 0;
+
+            suma = convertir(unoText) +
+                convertir(dosText) +
+                convertir(tresText) +
+                convertir(cuatroText) +
+                convertir(cincoText) +
+                convertir(seisText); 
+
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "La suma es: " +suma, 
+                        "Resultado", 
+                        JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(
                     this, 
-                    "La suma es: " +suma, 
-                    "Resultado", 
-                    JOptionPane.INFORMATION_MESSAGE);
+                    "Entrada invalida",
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
             
     }//GEN-LAST:event_SumarButtonActionPerformed
 
+    private void salirPrograma(){
+        int resultado = JOptionPane.showConfirmDialog(
+                this, 
+                "¿Realmente quieres salir?", 
+                "Salir", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE);
+        if (resultado == 0){
+            System.exit(0);
+        }
+    }
+    
     private void salirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirButtonActionPerformed
-        System.exit(0);
+        salirPrograma();
     }//GEN-LAST:event_salirButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        salirPrograma();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
