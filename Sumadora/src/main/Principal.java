@@ -1,20 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main;
 
 import gui.PrincipalFrame;
+import javax.swing.SwingUtilities;
 
-/**
- *
- * @author karimnot
- */
-public class Principal {
+public class Principal{
     
     public static void main(String[] args) {
-        PrincipalFrame frame = new PrincipalFrame();
+        
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                PrincipalFrame pf = new PrincipalFrame();
+                pf.setVisible(true);
+            }
+        });
+        
+        
     }
     
 }
