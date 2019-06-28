@@ -8,6 +8,7 @@ package gui;
 import controller.AlumnosModel;
 import controller.Controlador;
 import javax.swing.JOptionPane;
+import objects.Alumno;
 
 /**
  *
@@ -18,6 +19,9 @@ public class AlumnosFrame extends javax.swing.JFrame {
     
     private Controlador controlador;
     private AlumnosModel modelo;
+    
+    private AcercaDialog acercaDialog;
+    private AlumnoDialog alumnoDialog;
     /**
      * Creates new form AlumnosFrame
      */
@@ -25,6 +29,10 @@ public class AlumnosFrame extends javax.swing.JFrame {
         
         controlador = new Controlador();
         modelo = new AlumnosModel(controlador.obtenerAlumnos());
+        
+        acercaDialog = new AcercaDialog(this, true);
+        alumnoDialog = new AlumnoDialog(this, true);
+        alumnoDialog.setControlador(controlador);
         
         initComponents();
     }
@@ -39,7 +47,7 @@ public class AlumnosFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        AlumnosTable = new javax.swing.JTable();
+        alumnosTable = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         nuevotool = new javax.swing.JButton();
         actualizarTool = new javax.swing.JButton();
@@ -69,8 +77,8 @@ public class AlumnosFrame extends javax.swing.JFrame {
             }
         });
 
-        AlumnosTable.setModel(modelo);
-        jScrollPane1.setViewportView(AlumnosTable);
+        alumnosTable.setModel(modelo);
+        jScrollPane1.setViewportView(alumnosTable);
 
         jToolBar1.setRollover(true);
 
@@ -237,6 +245,9 @@ public class AlumnosFrame extends javax.swing.JFrame {
 
     private void nuevoMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoMenuActionPerformed
         System.out.println("Nuevo");
+        alumnoDialog.setVisible(true);
+        modelo.fireTableDataChanged();
+        System.out.println("Cerro");
     }//GEN-LAST:event_nuevoMenuActionPerformed
 
     private void salirMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirMenuActionPerformed
@@ -246,18 +257,40 @@ public class AlumnosFrame extends javax.swing.JFrame {
 
     private void ayudaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ayudaMenuActionPerformed
         System.out.println("Ayuda");
+        acercaDialog.setVisible(true);
     }//GEN-LAST:event_ayudaMenuActionPerformed
 
     private void modificarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarMenuActionPerformed
-        System.out.println("Modificar");
+        int selected = alumnosTable.getSelectedRow();
+        if (selected > -1){
+            Alumno alumno = controlador.obtenerAlumno(selected);
+            System.out.println(alumno);
+        }else{
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "No has seleccionado a ningun alumno", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_modificarMenuActionPerformed
 
     private void eliminarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarMenuActionPerformed
-        System.out.println("Eliminar");
+        int selected = alumnosTable.getSelectedRow();
+        if (selected > -1){
+            controlador.eliminar(selected);
+            modelo.fireTableDataChanged();
+        }else{
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "No has seleccionado a ningun alumno", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_eliminarMenuActionPerformed
 
     private void guardarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarMenuActionPerformed
         System.out.println("Guaradar");
+        controlador.guardar();
     }//GEN-LAST:event_guardarMenuActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -313,8 +346,8 @@ public class AlumnosFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable AlumnosTable;
     private javax.swing.JButton actualizarTool;
+    private javax.swing.JTable alumnosTable;
     private javax.swing.JMenuItem ayudaMenu;
     private javax.swing.JButton ayudaTool;
     private javax.swing.JMenuItem eliminarMenu;

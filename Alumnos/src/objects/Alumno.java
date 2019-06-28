@@ -5,11 +5,13 @@
  */
 package objects;
 
+import java.io.Serializable;
+
 /**
  *
  * @author karimnot
  */
-public class Alumno {
+public class Alumno implements Serializable{
     
     private String noControl;
     private String nombre;
